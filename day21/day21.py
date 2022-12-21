@@ -24,13 +24,10 @@ raw_input = raw_input.replace('humn', 'x')
 variables = {i[0]: i[1] for i in [j.split(': ') for j in raw_input.splitlines()]}
 variables['x'] = 'x'
 
-root = variables['root'].replace('+', '=')
-lhs, rhs = re.findall('[a-z]+', root)
-lhs = variables[lhs]
-rhs = variables[rhs]
+root = variables['root'].replace('+', '-')
 
 while True:
-    words = re.findall('[a-z]+', lhs) 
+    words = re.findall('[a-z]+', root) 
     if len(words) == 0:
         break
     if len(words) == 1 and words[0] == 'x':
@@ -38,18 +35,8 @@ while True:
     for word in words:
         if word == 'x':
             continue
-        lhs = lhs.replace(word, f'({variables[word]})')
-while True:
-    words = re.findall('[a-z]+', rhs) 
-    if len(words) == 0:
-        break
-    if len(words) == 1 and words[0] == 'x':
-        break
-    for word in words:
-        if word == 'x':
-            continue
-        rhs = rhs.replace(word, f'({variables[word]})')
+        root = root.replace(word, f'({variables[word]})')
 
 x = symbols('x')
-sol = solve(eval(lhs) - eval(rhs), x)
+sol = solve(eval(root), x)
 print(sol)
